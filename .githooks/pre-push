@@ -3,19 +3,28 @@
 #
 # Se activa con:  git config core.hooksPath .githooks
 # Para saltearlo: git push --no-verify  (sabiendo que rompés tu propia regla)
+#
+# Git pasa por stdin una línea por cada ref que se va a modificar:
+#   <ref local> <sha local> <ref remota> <sha remoto>
+# Lo que importa es la ref REMOTA que se va a escribir, no la rama en la
+# que estés parado: borrar otra rama estando en main es perfectamente válido.
 
-RAMA=$(git symbolic-ref --short HEAD 2>/dev/null)
+PROTEGIDA="refs/heads/main"
+SHA_NULO="0000000000000000000000000000000000000000"
 
-if [ "$RAMA" = "main" ]; then
-    echo ""
-    echo "  ❌ No se pushea directo a main."
-    echo ""
-    echo "     Creá una rama y abrí un Pull Request:"
-    echo "       git switch -c feat/lo-que-estes-haciendo"
-    echo ""
-    echo "     Ver CONTRIBUTING.md"
-    echo ""
-    exit 1
-fi
+while read -r _ref_local sha_local ref_remota _sha_remoto; do
+    # sha local en ceros = es un borrado de rama, no una escritura
+    if [ "$ref_remota" = "$PROTEGIDA" ] && [ "$sha_local" != "$SHA_NULO" ]; then
+        echo ""
+        echo "  ❌ No se pushea directo a main."
+        echo ""
+        echo "     Creá una rama y abrí un Pull Request:"
+        echo "       git switch -c feat/lo-que-estes-haciendo"
+        echo ""
+        echo "     Ver CONTRIBUTING.md"
+        echo ""
+        exit 1
+    fi
+done
 
 exit 0
