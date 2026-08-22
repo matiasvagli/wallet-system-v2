@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # La versión de pnpm sale de "packageManager" en package.json.
+      # No declararla acá también: la acción falla si recibe las dos.
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - uses: actions/setup-node@v4
         with:
@@ -61,5 +61,8 @@ jobs:
               echo "::error::Commit $sha no sigue Conventional Commits: '$MENSAJE'"
               FALLOS=1
             fi
-          done < <(git rev-list origin/${{ github.base_ref }}..HEAD)
+          # --no-merges excluye el commit de merge sintético que GitHub
+          # genera para correr los checks del PR ("Merge <head> into <base>").
+          # No lo escribió nadie, así que no tiene por qué seguir la convención.
+          done < <(git rev-list --no-merges origin/${{ github.base_ref }}..HEAD)
           exit $FALLOS
