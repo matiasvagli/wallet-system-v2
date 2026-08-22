@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint · Typecheck · Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Tests
+        run: pnpm test
+
+  commit-lint:
+    name: Conventional Commits
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validar formato de los commits del PR
+        run: |
+          # Los commits del PR tienen que seguir Conventional Commits.
+          # Ver CONTRIBUTING.md
+          PATRON='^(feat|fix|docs|refactor|test|chore|perf)(\([a-z0-9-]+\))?!?: .{1,}'
+          FALLOS=0
+          while read -r sha; do
+            MENSAJE=$(git log -1 --format=%s "$sha")
+            if ! echo "$MENSAJE" | grep -qE "$PATRON"; then
+              echo "::error::Commit $sha no sigue Conventional Commits: '$MENSAJE'"
+              FALLOS=1
+            fi
+          done < <(git rev-list origin/${{ github.base_ref }}..HEAD)
+          exit $FALLOS

@@ -1,0 +1,21 @@
+#!/bin/bash
+# Impide pushear directo a main. Ver CONTRIBUTING.md
+#
+# Se activa con:  git config core.hooksPath .githooks
+# Para saltearlo: git push --no-verify  (sabiendo que rompés tu propia regla)
+
+RAMA=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+if [ "$RAMA" = "main" ]; then
+    echo ""
+    echo "  ❌ No se pushea directo a main."
+    echo ""
+    echo "     Creá una rama y abrí un Pull Request:"
+    echo "       git switch -c feat/lo-que-estes-haciendo"
+    echo ""
+    echo "     Ver CONTRIBUTING.md"
+    echo ""
+    exit 1
+fi
+
+exit 0
