@@ -1,8 +1,8 @@
 # Para quien esté evaluando este proyecto
 
-Esta página está escrita para alguien que tiene quince minutos y quiere saber qué
-sabe hacer el autor. No repite el README: explica **el criterio detrás del
-código**.
+Esta página está escrita para alguien que tiene quince minutos y quiere saber
+cómo pienso, cómo trabajo y cómo llevo un workflow diario. En síntesis: cómo hago
+el código. No repite el README: explica **el criterio detrás del código**.
 
 > **Estado actual:** en construcción. El README tiene el roadmap con lo que ya
 > funciona. Prefiero decirlo acá antes que dejar que lo descubras solo.
@@ -34,14 +34,17 @@ sobre-ingeniería me parece más importante que saber implementarla.
 **Elegí TypeORM sobre Prisma aun siendo Prisma más demandado.**
 El criterio fue que Prisma no genera migraciones de rollback. En un sistema que
 mueve dinero, una migración que no se puede revertir de forma controlada es un
-riesgo operativo. La ergonomía cede ante eso.
+riesgo operativo. La ergonomía cede ante eso. Hubiera sido más fácil meter Prisma
+con IA y quedar como un campeón, pero acá estoy pensando como ingeniero, no como
+vibecoder.
 ([ADR-0002](./adr/0002-typeorm-sobre-prisma.md))
 
 **Elegí saga orquestada por auditabilidad.**
 La versión coreografiada tiene menos acoplamiento, pero nadie conoce el estado
 global de la transferencia. En un sistema de dinero, "¿dónde está esta
 transferencia?" tiene que responderse con una consulta, no con una investigación
-entre logs de cuatro servicios.
+entre logs de cuatro servicios. Para mí es una decisión fácil, aunque entiendo que
+en un equipo sea discutible.
 ([ADR-0003](./adr/0003-saga-orquestada.md))
 
 **La idempotencia vive en la base de datos, no en el código.**
@@ -52,8 +55,8 @@ carrera entre la lectura y la escritura, y la restricción no.
 
 ## 3. Cómo se trabajó
 
-Un solo autor, pero con proceso de equipo — porque el proceso también es parte de
-lo que quiero mostrar:
+Yo solo — sí, con agentes, obvio — pero con proceso de equipo, porque el proceso
+también es parte de lo que quiero mostrar:
 
 - **Todo entra por Pull Request.** `main` protegida, sin push directo
 - **Un issue por unidad de trabajo**, cerrado por su PR
@@ -64,16 +67,17 @@ lo que quiero mostrar:
 El historial de commits y los PRs cerrados son parte del entregable. Si querés ver
 cómo razono un cambio, la descripción de cualquier PR sirve más que el diff.
 
-**Sobre la asistencia de IA.** Trabajé con un agente en parte de la
-implementación. Los commits donde participó lo declaran con `Co-Authored-By`, así
-que está en el historial y no hace falta que me creas. Lo que no delegué: la
-arquitectura, los ADRs y qué entra a `main`. Si un PR está mergeado es porque lo
-leí, lo entendí y lo banco.
+**Sobre la asistencia de IA.** Trabajo con agentes en parte de la implementación.
+Los commits donde participan lo declaran con `Co-Authored-By`, así que está en el
+historial y no hace falta que me creas. Lo que no delego: la arquitectura, los
+ADRs y qué entra a `main`. Si un PR está mergeado es porque lo leí, lo entendí y
+lo banco.
 
 ## 4. Lo que este proyecto arregla de una versión anterior
 
-Este sistema tiene una v1 que escribí en 2024 y retomé brevemente con asistencia
-de IA. Al volver a abrirla encontré tres cosas que vale la pena nombrar, porque
+Este sistema tiene una v1 que escribí en 2024, hecha en Python con varios
+frameworks encima. La dejé en su momento y la retomé brevemente con asistencia de
+IA. Al volver a abrirla encontré tres cosas que vale la pena nombrar, porque
 explican decisiones de esta versión:
 
 **Dos implementaciones del mismo flujo conviviendo.** La v1 tenía la transferencia
@@ -107,8 +111,8 @@ Tan importante como lo que está:
 orquestación de contenedores. Docker Compose comunica la arquitectura sin agregar
 una capa que no aporta al tema.
 
-**CQRS y Event Sourcing.** Encajarían en un sistema de billeteras y son tentadores
-de mostrar. No están porque este sistema no tiene la asimetría de lectura/escritura
+**CQRS y Event Sourcing.** Estuve re tentado, no te voy a mentir: encajarían en un
+sistema de billeteras y quedan bien de mostrar. No están porque este sistema no tiene la asimetría de lectura/escritura
 que los justifica. Agregarlos sería demostrar que conozco el patrón, no que sé
 cuándo aplicarlo.
 
@@ -145,5 +149,5 @@ Si tenés poco tiempo y querés evaluar criterio técnico, en este orden:
 
 ---
 
-Matias Vagliviello · [github.com/matiasvagli](https://github.com/matiasvagli) ·
+Matías Vagliviello · [github.com/matiasvagli](https://github.com/matiasvagli) ·
 vaglimatias@gmail.com
