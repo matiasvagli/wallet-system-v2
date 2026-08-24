@@ -69,6 +69,18 @@ Closes #14
 
 El cuerpo del commit explica **por qué**; el diff ya muestra el qué.
 
+### Trabajo asistido por IA
+
+Si un agente escribió parte del código de un commit, el commit lo declara con un
+trailer estándar:
+
+```
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+El autor del commit sigue siendo quien abre el PR. El trailer dice quién tipeó,
+no quién decidió: la responsabilidad sobre lo que entra a `main` no se delega.
+
 ## Definition of Done
 
 Un PR se mergea cuando:

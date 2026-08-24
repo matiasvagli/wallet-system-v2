@@ -64,6 +64,12 @@ lo que quiero mostrar:
 El historial de commits y los PRs cerrados son parte del entregable. Si querés ver
 cómo razono un cambio, la descripción de cualquier PR sirve más que el diff.
 
+**Sobre la asistencia de IA.** Trabajé con un agente en parte de la
+implementación. Los commits donde participó lo declaran con `Co-Authored-By`, así
+que está en el historial y no hace falta que me creas. Lo que no delegué: la
+arquitectura, los ADRs y qué entra a `main`. Si un PR está mergeado es porque lo
+leí, lo entendí y lo banco.
+
 ## 4. Lo que este proyecto arregla de una versión anterior
 
 Este sistema tiene una v1 que escribí en 2024 y retomé brevemente con asistencia
